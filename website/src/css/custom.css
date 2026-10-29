@@ -26,7 +26,10 @@
 main.unif-home.files-home {
   --primary: var(--ifm-color-primary);
   --primary-pressed: var(--ifm-color-primary-dark);
-  --on-primary: var(--ifm-background-color);
+  --on-primary: #fff;
+}
+[data-theme='dark'] main.unif-home.files-home {
+  --on-primary: #1b1b1d;
 }
 .files-container {
   max-width: 1120px;
