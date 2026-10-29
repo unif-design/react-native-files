@@ -1,97 +1,17 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Files 原生示例
 
-# Getting Started
+真实 React Native iOS／Android 宿主，从 `@unif/react-native-files` 公共入口验证文件操作、下载、文件持有和回环 HTTP。运行前完成[宿主接入](../docs/host-setup.md)：精确 SDK 版本、由宿主唯一来源显式应用的补丁、实际依赖副本核对及原生重建都是前置条件。库安装不会自动打补丁，Expo Go 和 Web 不能替代此示例。
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
-
-## Step 1: Start Metro
-
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
+在库根目录安装依赖并准备宿主补丁后执行：
 
 ```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+yarn check:native-patches --patch-dir <宿主补丁目录>
+yarn example start
+yarn example android
 ```
 
-## Step 2: Build and run your app
+iOS 先在 `example/` 执行 `bundle install`、`bundle exec pod install --project-directory=ios`，再从根目录执行 `yarn example ios`。Android release 仅放行回环地址 `127.0.0.1`；debug 保留 Metro 的开发网络访问。
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+点击“运行原生验证”只操作本应用根下的 `UnifFilesExample` 目录，验证读写、路径编码、实际大小、复制拒绝覆盖、回环读取、下载与预取消、单文件删除、持有后清理以及目录根保留，结束时关闭服务并清理示例文件。失败会显示实际步骤错误，不宣称验证通过。
 
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+该交互没有覆盖所有在途取消或外部并发场景；对应时序由行为测试覆盖，设备和实际业务验收仍应按消费场景执行。若要验证 npm 产物，先使用根目录 `yarn check:consumer` 创建独立宿主，再由宿主准备其补丁并执行同样的验证。

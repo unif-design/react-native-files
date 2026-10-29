@@ -11,7 +11,7 @@ description: 公开契约、工程规范、同源文档和分层验证。
 
 本库是 `create-react-native-library` 的 JavaScript 库形态，模板版本记录在根 `package.json`。库无自有 iOS／Android 模块；原生行为来自明确版本的 peer 和宿主维护的必要 SDK 修正，example 使用真实 React Native 宿主。
 
-工程接入采用 [unif-design/.github](https://github.com/unif-design/.github) 的 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 与同步流程，标准来源为 main 的 `896239031ddba5902adf915060f37fff5ed9edf1`。共享 CI、发布、Agent 入口和 LLM 生成实现从组织标准同步，不在本库复制维护另一套规则。
+工程接入采用 [unif-design/.github](https://github.com/unif-design/.github) 的 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 与同步流程，标准来源为 main 的 `a29d71586a63a1b39d9a3acc446741289150ac41`。共享 CI、发布、Agent 入口和 LLM 生成实现从组织标准同步，不在本库复制维护另一套规则。
 
 开发使用 `unif-portal-dev-skills` 的 `code-development`，按工作内容取得 `code-testing`、`code-review` 和 `code-delivery`。本库的接口资料是本仓公开文档与源码，不编造 Files 专属技能名称。
 
