@@ -15,7 +15,7 @@ description: 工程规范、文档维护、构建与测试。
 
 工程标准采用 [unif-design/.github](https://github.com/unif-design/.github) 的 `a29d71586a63a1b39d9a3acc446741289150ac41` 修订。CI、发布、Agent 入口和 LLM 生成器按 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 同步，统一在组织标准中维护。
 
-开发使用 `unif-portal-dev-skills` 的 `code-development`，测试、审查和交付分别使用 `code-testing`、`code-review`、`code-delivery`。Files API 以本仓源码和文档为准。
+通用规范使用 `uni-skills`：`code-organization` 说明目录与文件组织，`react-native-development` 说明 RN 实现要求，`react-native-library` 说明独立库与消费者验证，`documentation` 说明文档与文档站维护。Unif 的设计、测试、审查和交付按 `unif-portal-dev-skills` 对应技能执行；本库接口与行为以公开类型和有效契约为准。
 
 行为契约：
 
@@ -59,13 +59,17 @@ yarn website build
 
 分发检查需覆盖 tarball 的导出、类型和文件清单，并从 tarball 安装后测试。网站检查构建、链接、桌面与窄屏、明暗主题、导航和刷新。
 
-`yarn check:consumer` 在仓库外创建全新应用，从 tarball 安装并检查公开类型和 Web 入口，不应用 SDK 补丁。完成应用侧补丁配置后，运行：
+先完成 `yarn build`，再运行 `yarn check:consumer`。命令默认在系统临时目录创建全新应用，复制示例工程，打包本库并安装依赖，检查实际 tarball 的公开类型和 Web 入口。它不应用 SDK 补丁，也不执行原生构建。
+
+可用 `yarn check:consumer --output <仓库外的全新目录>` 指定输出；父目录必须存在，目标目录不能已存在。成功后输出消费者路径并保存 `consumer-verification.json`；失败以非零状态退出，保留现场供排查，不自动删除已创建目录。
+
+完成应用侧补丁配置后，运行：
 
 ```sh
 yarn check:native-patches --patch-dir <应用补丁目录> --consumer <消费应用目录>
 ```
 
-该命令只读核对应用和 Files 实际加载的 SDK 副本。通过后，再进行双端构建和设备检查。
+该命令只读核对补丁版本、文件摘要，以及应用和 Files 实际加载的 SDK 副本；不传 `--consumer` 时检查本仓和 example。缺少补丁、版本不匹配或文件内容不符时，以非零状态退出，不修改 SDK。通过后，再进行双端构建和设备检查。
 
 ## 原生与交付验证
 
