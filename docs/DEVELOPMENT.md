@@ -1,44 +1,46 @@
 ---
 id: development
 slug: /development
-title: 研发入口
-description: 公开契约、工程规范、同源文档和分层验证。
+title: 开发指南
+description: 工程规范、文档维护、构建与测试。
 ---
 
-# 研发入口
+# 开发指南
+
+本页面向库维护者。应用接入请先阅读[快速开始](quick-start.md)和[安装配置](host-setup.md)。
 
 ## 规范与实现依据
 
-本库是 `create-react-native-library` 的 JavaScript 库形态，模板版本记录在根 `package.json`。库无自有 iOS／Android 模块；原生行为来自明确版本的 peer 和宿主维护的必要 SDK 修正，example 使用真实 React Native 宿主。
+本库使用 `create-react-native-library` 的 JavaScript 模板，版本见根 `package.json`。文件操作依赖原生 SDK，本库没有自有原生模块。`example` 提供 iOS／Android 应用。
 
-工程接入采用 [unif-design/.github](https://github.com/unif-design/.github) 的 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 与同步流程，标准来源为 main 的 `a29d71586a63a1b39d9a3acc446741289150ac41`。共享 CI、发布、Agent 入口和 LLM 生成实现从组织标准同步，不在本库复制维护另一套规则。
+工程标准采用 [unif-design/.github](https://github.com/unif-design/.github) 的 `a29d71586a63a1b39d9a3acc446741289150ac41` 修订。CI、发布、Agent 入口和 LLM 生成器按 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 同步，统一在组织标准中维护。
 
-开发使用 `unif-portal-dev-skills` 的 `code-development`，按工作内容取得 `code-testing`、`code-review` 和 `code-delivery`。本库的接口资料是本仓公开文档与源码，不编造 Files 专属技能名称。
+开发使用 `unif-portal-dev-skills` 的 `code-development`，测试、审查和交付分别使用 `code-testing`、`code-review`、`code-delivery`。Files API 以本仓源码和文档为准。
 
-公开行为依据以下平台契约，库文档将其组织为独立包的消费接口：
+行为契约：
 
 - [文件读写与目录操作](https://github.com/unif-design/unif-platform-architecture/blob/main/capabilities/files.md)
 - [单文件复制、删除与持有](https://github.com/unif-design/unif-platform-architecture/blob/main/capabilities/local-media-files.md)
 - [单文件下载](https://github.com/unif-design/unif-platform-architecture/blob/main/capabilities/file-download.md)
 - [本地资源访问](https://github.com/unif-design/unif-platform-architecture/blob/main/capabilities/local-resources.md)
 
-## 公共入口与消费边界
+## 代码与接口
 
-`src/index.ts` 是原生公开入口，Web 入口保留相同 API 形状和已定义的不支持语义。源码、类型产物、npm exports、文档和 example 同步维护。业务目录、账号来源、上传、草稿和外部协议转换保留在宿主。
+`src/index.ts` 是原生入口，`src/index.web.ts` 是 Web 入口。修改 API 时同步类型、npm exports、文档和 example。业务目录、账号、上传、草稿及外部协议转换由应用实现。
 
-根目录选择保持 iOS `LibraryDir`／Android `DocumentDir`。复制与下载目标、目录清理范围和资源服务生命周期由调用方明确；库不引入账号状态、业务子目录、重试队列或额外默认限制。
+根目录使用 iOS `LibraryDir`／Android `DocumentDir`。复制和下载路径、目录清理范围、服务关闭时机由应用指定，不在库中增加账号状态、业务目录或重试队列。
 
-日志只通过 `@unif/react-native-logger` 的公开根入口接入宿主共享运行时。SDK 补丁由宿主统一维护，本库不保存、镜像或随 npm 包分发补丁，不自动修改消费者依赖。RNFS 2.41.0、StaticServer 0.28.1 的必要修正及实际依赖副本核对见[宿主接入](host-setup.md)。
+日志使用应用共享的 `@unif/react-native-logger`。SDK 补丁由应用统一维护和应用，本库不保存、分发或自动安装补丁。版本与修正要求见[安装配置](host-setup.md)。
 
 ## 文档与网站
 
-`docs/` 是 Markdown 唯一来源，Docusaurus 直接读取；`website/docs` 指向同一目录供共享 LLM 生成器使用。网站使用 `@unif/react-native-design` 1.13.6 的公开 `docs-home.css`，没有原生文件能力的 Web 模拟。
+Markdown 源文件位于 `docs/`，Docusaurus 直接读取；`website/docs` 指向同一目录，供 LLM 生成器使用。首页采用 `@unif/react-native-design` 1.13.6 的 `docs-home.css`。
 
-LLM 实现由组织 `templates/llms/` 维护，经 `scripts/sync-repo.sh` 或 `scripts/sync-llms.cjs` 下发。修改文档源后构建生成 `llms.txt`、`llms-full.txt` 和 `md/`，这些产物不入库。不要在本库另建生成器或直接编辑同步来的实现。
+LLM 生成器由组织 `templates/llms/` 维护，通过 `scripts/sync-repo.sh` 或 `scripts/sync-llms.cjs` 同步。修改 Markdown 后重新构建，生成 `llms.txt`、`llms-full.txt` 和 `md/`；生成产物不入库，也不手工修改。
 
 ## 本地检查
 
-从库根目录执行当前脚本；安装使用仓库固定的 Yarn 版本：
+使用仓库指定的 Yarn 版本，在根目录执行：
 
 ```sh
 yarn install --immutable
@@ -51,16 +53,22 @@ yarn website typecheck
 yarn website build
 ```
 
-`typecheck` 包括库和 example 的源码消费。自动化验证应覆盖失败与部分成功、目标归属、真实文件状态核实、下载取消和超限终态、资源服务关闭以及重复释放；测试替身保持被测实现真实，只替换外部 SDK 边界。
+`typecheck` 检查库和 example。测试需覆盖失败、部分删除、文件状态、下载取消和超限、服务关闭及重复释放；仅对外部 SDK 使用测试替身。
 
-SDK 与消费者验证先准备真实消费应用，再由宿主显式应用其统一维护的补丁，最后从实际解析位置核对 SDK 版本与修正。完成这项前置后运行 `yarn test:sdk` 等适用边界检查；库的准备或验证过程不代替宿主应用补丁。
+运行 `yarn test:sdk` 或原生验证前，由应用配置补丁，并检查实际加载的 SDK 版本和文件内容。
 
-分发另验真实 tarball 的公开导出、类型和文件清单，确认没有重复补丁，再以安装产物验证消费者。网站检查构建、链接、桌面／窄屏、明暗主题、导航和刷新。
+分发检查需覆盖 tarball 的导出、类型和文件清单，并从 tarball 安装后测试。网站检查构建、链接、桌面与窄屏、明暗主题、导航和刷新。
 
-`yarn check:consumer` 创建仓库外的全新消费者，从真实 tarball 安装并验证全部公开类型和 Web 入口；它不读取或应用宿主补丁，生成的记录会明确标记原生验收待完成。宿主从唯一维护源显式准备该消费者后，使用 `yarn check:native-patches --patch-dir <宿主补丁目录> --consumer <消费者目录>` 只读核对应用与 Files 实际解析的每份 SDK，再在该消费者执行双端构建与设备检查。普通依赖安装或未准备补丁的 CI 编译不能替代这一步。
+`yarn check:consumer` 在仓库外创建全新应用，从 tarball 安装并检查公开类型和 Web 入口，不应用 SDK 补丁。完成应用侧补丁配置后，运行：
+
+```sh
+yarn check:native-patches --patch-dir <应用补丁目录> --consumer <消费应用目录>
+```
+
+该命令只读核对应用和 Files 实际加载的 SDK 副本。通过后，再进行双端构建和设备检查。
 
 ## 原生与交付验证
 
-仓库 [example](https://github.com/unif-design/react-native-files/tree/main/example) 通过包公开入口调用真实原生依赖。先确认补丁和原生依赖，再验证读写与路径编码、目录统计和授权清理、真实网络下载与停止、回环资源加载和关闭。
+在 [example](https://github.com/unif-design/react-native-files/tree/main/example) 中验证文件读写、路径编码、目录统计与清理、下载与取消、本地 HTTP 加载与关闭。使用实际原生依赖和已配置补丁的应用。
 
-源码检查、自动化测试、JS bundle、原生编译、设备验证和真实业务验收分别记录。npm 发布、远端 CI、GitHub Release 和文档部署也各自核验；任何一层通过都不自动证明其他层已完成。保留有效设计与必要验收结论，原始日志和个人设备操作记录不作为公开文档内容。
+分别记录静态检查、测试、构建、设备运行和业务验收结果；发布时另核对 npm 产物、CI、GitHub Release 和线上文档。保留有效设计和验收结论，原始日志及个人设备记录保存在仓库外。
