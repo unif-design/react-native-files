@@ -1,7 +1,7 @@
 {
   "name": "@unif/react-native-files",
   "version": "0.1.0",
-  "description": "React Native 文件操作、下载、生命周期与本地资源访问",
+  "description": "React Native 文件读写、下载、目录清理与本地 HTTP 访问",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
   "exports": {
