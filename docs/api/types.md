@@ -1,11 +1,18 @@
 ---
-title: 公开类型
-description: 根入口导出的 34 个输入、结果与生命周期类型。
+title: 类型参考
+description: 输入参数、返回结果、错误和文件清理接口。
 ---
 
-# 公开类型
+# 类型参考
 
-从 `@unif/react-native-files` 使用 `import type` 导入以下类型。字段以源码公开入口为准；下列将内部成功结构展开，不增加内部类型的公开导出。RNFS 相关字段继续使用其原有类型。
+以下类型均可从 `@unif/react-native-files` 导入。结果类型中的成功分支已展开，RNFS 相关字段沿用其类型定义。
+
+```ts
+import type {
+  ReadLocalFileInput,
+  ReadLocalFileResult,
+} from '@unif/react-native-files';
+```
 
 ## 公共错误
 
@@ -22,7 +29,7 @@ interface LocalFileFailed {
 }
 ```
 
-`message` 是操作失败说明；`cause` 可能保留原始 SDK 异常，仅供内部诊断。不要通过错误文案匹配判断状态或把 `cause` 原样交给外部消费者。
+按 `reason` 判断错误类型，`message` 用于说明原因。`cause` 可能包含原始 SDK 异常，仅用于内部诊断，避免直接展示或对外发送。
 
 ## 文件内容、复制与大小
 
@@ -88,7 +95,7 @@ type ClearLocalDirectoryResult =
   | ClearLocalDirectoryFailed;
 ```
 
-`failures` 指向本次快照中的直接子项。`failed` 不一定能提供该列表；失败目录内部也可能已经删除部分内容。
+`failures` 列出本次记录的直接子项及错误。`failed` 可能没有该列表；失败目录中也可能已有文件被删除。
 
 ## 下载
 
@@ -185,7 +192,7 @@ interface LocalResourceAccess {
 }
 ```
 
-## 文件使用期
+## 文件清理
 
 ```ts
 interface LocalFileLifetime {
@@ -194,4 +201,4 @@ interface LocalFileLifetime {
 }
 ```
 
-函数输入、结果与副作用分别见[文件操作](file-operations.md)、[下载](download.md)、[本地资源](local-resources.md)和[文件使用期](lifetime.md)。
+用法见[文件与目录](file-operations.md)、[文件下载](download.md)、[本地资源访问](local-resources.md)和[文件清理](lifetime.md)。

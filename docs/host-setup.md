@@ -1,15 +1,15 @@
 ---
-title: 宿主与补丁
-description: 原生依赖、必需补丁、共享日志运行时和宿主的文件责任。
+title: 安装配置
+description: 原生依赖、SDK 补丁、日志和本地 HTTP 配置。
 ---
 
-# 宿主与补丁
+# 安装配置
 
-## 依赖接线
+## 版本要求
 
-本包是 JavaScript 库，文件能力使用现有原生 SDK。宿主安装 peer 依赖并完成原生自动链接、iOS Pods 和应用重新编译。
+本库通过原生 SDK 操作文件。安装 peer 依赖后，需完成原生自动链接、iOS Pods 安装并重新编译应用。
 
-| 依赖                                     | 公开要求    | 开发基线 |
+| 依赖                                     | 版本要求    | 验证基线 |
 | ---------------------------------------- | ----------- | -------- |
 | `react`                                  | `>=19.3.0`  | 19.3.1   |
 | `react-native`                           | `>=0.88.0`  | 0.88.1   |
@@ -18,45 +18,46 @@ description: 原生依赖、必需补丁、共享日志运行时和宿主的文�
 | `react-native-blob-util`                 | 精确 0.25.1 | 0.25.1   |
 | `@unif/react-native-logger`              | `^0.1.3`    | 0.1.3    |
 
-`react-native-url-polyfill` 4.0.0 是本包的普通依赖，消费者无需另行安装或设置全局 URL 替换。版本范围不证明所有组合都已经过原生或设备验证。
+`react-native-url-polyfill` 4.0.0 随本包安装，无需另行配置全局 URL。表中验证基线不代表版本范围内的所有组合都已测试。
 
-没有额外的文件 Provider 或库级初始化函数。根目录、资源服务实例和业务生命周期按实际入口组合；消费示例见[快速开始](quick-start.md)。
+本库无需额外的 Provider 或初始化调用。用法见[快速开始](quick-start.md)。
 
-## 宿主维护的 SDK 修正
+## SDK 补丁
 
-本库不保存或随 npm 包分发 SDK 补丁，也不自动修改消费者依赖。补丁由宿主在统一来源维护和应用。采用当前 SDK 基线时，需要保持以下能力：
+当前依赖需要以下修正。补丁由应用统一维护和应用，本库不附带或自动安装补丁。
 
-| SDK 与版本                                      | 必要修正                                                                                                   |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `@dr.pogodin/react-native-fs` 2.41.0            | 真实文件元数据与错误交付、目录项判断和递归删除；下载取消／失败等待原生真实终态，保留目标落地错误与任务释放 |
-| `@dr.pogodin/react-native-static-server` 0.28.1 | Windows 宿主构建 Android 时 lighttpd 的 CMake PCRE2／glob 链接修正                                         |
+| SDK 与版本                                      | 必要修正                                                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `@dr.pogodin/react-native-fs` 2.41.0            | 文件大小与错误返回、目录项识别、递归删除；下载取消或失败时等待原生任务结束，正确报告写入错误并释放任务 |
+| `@dr.pogodin/react-native-static-server` 0.28.1 | 修复 Windows 环境构建 Android 时 lighttpd 的 CMake PCRE2／glob 链接问题                                |
 
-RNFS 的 Android 递归删除使用 `lstat` 识别节点，只递归真实目录；符号链接删除链接本身。该修正不提供外部并发重命名或写入下的事务隔离，也不把一般文件路径检查变成真实路径沙箱。
+RNFS 的 Android 修正使用 `lstat` 判断目录，遇到符号链接时只删除链接本身，不递归目标。它不提供并发写入、重命名或符号链接的安全隔离。
 
-下载停止请求必须与原生真实终态交接，结束后才清理未交付目标。缺失或不可用的元数据不能用虚构大小代替；递归删除和下载任务释放也不能仅由 JavaScript 标记模拟。
+下载修正确保原生任务结束后再清理失败文件，并正确报告无法取得的文件大小。这些原生修正不能用 JavaScript 状态标记代替。
 
-宿主按以下顺序接入：
+配置顺序：
 
-1. 安装精确版本的依赖，准备真实消费应用。
-2. 从宿主统一维护的来源取得对应补丁，通过宿主已有机制显式应用；同版本存在不同内容时先审查冲突，不覆盖差异或跳过失败。
-3. 从应用与 Files 的实际解析位置检查 SDK 版本及修正内容。依赖存在多份安装副本时，确认 JavaScript 消费和原生构建实际使用的副本，不能只检查顶层清单。
-4. 重新安装 Pods、重新构建原生应用，并验证实际文件与网络行为。干净安装和 CI 也应执行相同的宿主补丁与核对流程。
+1. 安装上述版本的依赖。
+2. 通过应用已有的补丁流程应用修正，先解决冲突或失败。
+3. 检查应用和 Files 实际加载的 SDK 副本。存在多份依赖时，确认 JavaScript 和原生构建使用的副本均已修正。
+4. 重新安装 Pods、编译应用，并验证文件操作、下载取消和本地 HTTP 访问。全新安装及 CI 使用同一补丁流程。
 
-宿主统一管理包含 BlobUtil 在内的其他 SDK 修正。Files 不为这些依赖另建补丁来源，也不在其他库中重复保存补丁。
+包括 BlobUtil 在内的其他 SDK 补丁也由应用统一管理，避免在多个库中重复维护。
 
-## 共享日志运行时
+## 日志
 
-复制失败清理与下载停止／清理诊断使用 `@unif/react-native-logger` 根入口，scope 为 `files.localMedia` 和 `files.download`。logger 是 peer，宿主与本库使用同一运行时实例。
+复制和下载的清理、停止错误使用 `@unif/react-native-logger` 记录，scope 为 `files.localMedia` 和 `files.download`。应用与本库应使用同一个 Logger 实例。
 
-宿主按 [Logger 文档](https://unif-design.github.io/react-native-logger/docs/quick-start)统一安装日志策略、存储和身份；本库不自行安装 logger、不切换身份、不创建日志目录。不要给每个文件操作安装一套运行时。日志用于诊断，不替代文件函数返回的结果。
+按 [Logger 文档](https://unif-design.github.io/react-native-logger/docs/quick-start)统一配置日志策略、存储和身份。Files 只记录日志，不初始化日志运行时或切换账号。操作是否成功仍以函数返回值为准。
 
-## 宿主责任与验证
+## 本地 HTTP 访问
 
-本地资源服务返回 `http://127.0.0.1:<port>`。Android release 宿主需要在网络安全配置中显式允许这个回环地址，并从 `AndroidManifest.xml` 的 `android:networkSecurityConfig` 引用；不要仅凭 debug 的 Metro 网络策略判定 release 可用。可沿用 [example 的精确地址配置](https://github.com/unif-design/react-native-files/blob/main/example/android/app/src/main/res/xml/network_security_config.xml)，无需全局开放远端 HTTP。平台规则见 [Android 网络安全配置](https://developer.android.com/privacy-and-security/security-config#cleartext-traffic)。iOS 按宿主既有 ATS 策略配置本地访问，分别验证最终构建中的实际 HTTP 请求与 WebView 加载。
+资源服务使用 `http://127.0.0.1:<port>`。Android release 构建需允许该地址的 HTTP 流量，并在 `AndroidManifest.xml` 中通过 `android:networkSecurityConfig` 引用配置。可参考 [example 配置](https://github.com/unif-design/react-native-files/blob/main/example/android/app/src/main/res/xml/network_security_config.xml)，只开放本地地址；debug 中的 Metro 网络配置不能代替 release 配置。平台说明见 [Android 文档](https://developer.android.com/privacy-and-security/security-config#cleartext-traffic)。
 
-- 在自己拥有的目录分配目标，检查来自外部协议的路径和权限，不直接使用任意不可信 URI。
-- 清理目录前确认完整范围，停止相关写入并处理上传、预览等持有者；不默认清空共享原生根。
-- 将共享资源服务的关闭权保留在应用组装处，核对 WebView 的实际回环 HTTP 加载和应用前后台行为。
-- 对实际 iOS／Android 工程验证原生链接、补丁、文件落地、取消和关闭。JS 构建、Web 返回值和测试替身不能代替这些结果。
+iOS 按应用的 ATS 策略配置本地访问。两个平台均需在最终构建中验证 HTTP 请求、WebView 加载和应用前后台切换。
 
-具体失败诊断见[排障](troubleshooting.md)，开发与交付检查见[研发入口](DEVELOPMENT.md)。
+## 文件管理
+
+应用负责检查外部文件路径及权限，使用功能专属目录。清理前结束相关读写、上传和预览；不要直接清空整个应用根目录。本地 HTTP 服务由应用统一管理，所有使用者结束后再关闭。
+
+配置后的原生行为需在 iOS／Android 应用中验证。常见错误见[常见问题](troubleshooting.md)，构建和测试步骤见[开发指南](DEVELOPMENT.md)。

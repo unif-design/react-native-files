@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Unif Files',
-  tagline: 'React Native 本地文件、下载与资源访问',
+  tagline: 'React Native 文件工具库',
   url: 'https://unif-design.github.io',
   baseUrl: '/react-native-files/',
   organizationName: 'unif-design',
@@ -50,8 +50,8 @@ const config: Config = {
           title: '文档',
           items: [
             { label: '快速开始', to: '/docs/quick-start' },
-            { label: '宿主与补丁', to: '/docs/host-setup' },
-            { label: '研发入口', to: '/docs/development' },
+            { label: '安装配置', to: '/docs/host-setup' },
+            { label: '开发指南', to: '/docs/development' },
           ],
         },
         {

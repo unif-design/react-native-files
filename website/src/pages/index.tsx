@@ -6,19 +6,19 @@ import '@unif/react-native-design/docs-home.css';
 export default function Home(): ReactNode {
   return (
     <Layout
-      title="本地文件、下载与资源访问"
-      description="React Native 本地文件读写、目录操作、下载、回环资源访问与文件使用期管理。"
+      title="React Native 文件工具库"
+      description="为 iOS 和 Android 应用提供文件读写、下载、目录清理和本地 HTTP 访问。"
     >
       <main className="unif-home files-home">
         <section className="hp-hero files-container">
           <span className="hp-eyebrow">Unif React Native</span>
           <h1 className="hp-title">
-            读写本地文件，
+            React Native
             <br />
-            <span className="accent">按使用期释放。</span>
+            <span className="accent">文件工具库</span>
           </h1>
           <p className="hp-tagline">
-            以明确的文件位置完成读写、下载和资源访问，让应用掌握目录范围、操作结果与释放时机。
+            为 iOS 和 Android 应用提供文件读写、下载、目录清理和本地 HTTP 访问。
           </p>
           <div className="hp-cta-row">
             <Link className="hp-btn hp-btn-primary" to="/docs/quick-start">
@@ -35,43 +35,52 @@ export default function Home(): ReactNode {
         >
           <article>
             <h2>文件与目录</h2>
-            <p>读取、写入、复制和删除，按实际文件状态交付结果与目录占用。</p>
+            <p>读取、写入、复制和删除文件，统计目录大小或清空目录。</p>
             <Link to="/docs/api/file-operations">了解文件操作 →</Link>
           </article>
           <article>
-            <h2>单文件下载</h2>
-            <p>从明确来源下载到独占目标，接收进度、取消、大小限制和终态。</p>
-            <Link to="/docs/api/download">了解下载交接 →</Link>
+            <h2>文件下载</h2>
+            <p>将 HTTP(S) 文件下载到本地，支持进度、取消和大小限制。</p>
+            <Link to="/docs/api/download">了解文件下载 →</Link>
           </article>
           <article>
             <h2>本地资源访问</h2>
-            <p>按需启动共享回环服务，为公开根内的资源生成访问链接。</p>
-            <Link to="/docs/api/local-resources">了解资源服务 →</Link>
+            <p>
+              通过本地 HTTP 服务访问指定目录中的文件，适用于 WebView 加载资源。
+            </p>
+            <Link to="/docs/api/local-resources">了解本地访问 →</Link>
           </article>
         </section>
         <section className="files-container files-example">
-          <h2>写入明确目标，接收实际结果</h2>
+          <h2>写入一个文件</h2>
           <pre>
-            <code>{`import { writeLocalFile } from '@unif/react-native-files';
+            <code>{`import {
+  getNativeTemporaryRoot,
+  writeLocalFile,
+} from '@unif/react-native-files';
 
-// targetUri 由应用在自己拥有的目录中分配。
-const result = await writeLocalFile({
-  uri: targetUri,
-  content: '你好，Unif Files',
-});
-
-if (result.status === 'success') {
-  // 使用已写入的 result.uri。
+const root = getNativeTemporaryRoot();
+if (root) {
+  const result = await writeLocalFile({
+    uri: \`\${root}/notes/hello.txt\`,
+    content: '你好，Unif Files',
+  });
+  if (result.status === 'failed') {
+    console.warn(result.error.message);
+  }
 }`}</code>
           </pre>
-          <p>
-            同一目标的写入会覆盖原内容。多个读取者通过持有与退休交接文件，最后一个持有结束后才开始清理。
-          </p>
-          <Link to="/docs/api/lifetime">查看文件使用期 →</Link>
+          <p>按 UTF-8 写入，自动创建父目录。文件已存在时会覆盖原内容。</p>
+          <Link to="/docs/api/lifetime">
+            多个组件使用同一文件时，如何安排清理？ →
+          </Link>
           <p className="files-native-note">
-            文件能力在 iOS／Android 原生宿主运行，需要安装依赖和必需补丁。
-            <Link to="/docs/host-setup">查看宿主接入</Link>，或从
-            <Link to="/docs/development">原生示例</Link>开始验证。
+            使用前需安装原生依赖并应用 SDK 补丁。参阅
+            <Link to="/docs/host-setup">安装配置</Link>或运行
+            <Link to="https://github.com/unif-design/react-native-files/tree/main/example">
+              原生示例
+            </Link>
+            。
           </p>
         </section>
       </main>

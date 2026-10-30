@@ -1,13 +1,13 @@
 ---
 title: 快速开始
-description: 安装原生依赖、应用必需补丁，并完成一次明确文件的读写。
+description: 安装依赖，写入并读取一个文本文件。
 ---
 
 # 快速开始
 
-## 安装依赖与补丁
+## 安装
 
-可安装版本以 [npm](https://www.npmjs.com/package/@unif/react-native-files) 为准。在 React Native 宿主安装：
+在 React Native 项目中安装本库及依赖：
 
 ```sh
 npm install @unif/react-native-files @unif/react-native-logger@0.1.3 \
@@ -16,20 +16,19 @@ npm install @unif/react-native-files @unif/react-native-logger@0.1.3 \
   react-native-blob-util@0.25.1
 ```
 
-本包不保存或分发 SDK 补丁，也不自动修改已安装的依赖。宿主按自身统一维护的补丁源和应用流程完成必要修正，再核对实际解析的依赖副本：
+按[安装配置](host-setup.md)应用必要的 SDK 补丁。本库不附带或自动应用补丁；安装 npm 包后仍需完成这一步。
 
-1. 确认 RNFS 2.41.0、StaticServer 0.28.1 及补丁对应版本，保留宿主已有流程。
-2. 由宿主显式应用其维护的补丁，补丁冲突或失败时先处理差异。
-3. 从实际消费者的解析位置核对 SDK 版本和修正内容，确认原生构建使用的副本一致。
-4. 重新安装 iOS Pods，并重新编译 iOS／Android 应用。
+iOS 项目还需安装 Pods：
 
 ```sh
 cd ios && bundle exec pod install
 ```
 
-随后重新编译 iOS／Android 应用。开发基线为 React 19.3.1、React Native 0.88.1；依赖范围不等于每个组合都已完成设备验证。原生版本、日志运行时和补丁说明见[宿主接入](host-setup.md)。
+最后重新编译 iOS 或 Android 应用。版本要求和本地 HTTP 配置见[安装配置](host-setup.md)。
 
-## 选择应用拥有的文件位置
+## 读写文本
+
+下面在应用目录中创建 `files-example/note.txt`，然后读取内容：
 
 ```ts
 import {
@@ -45,7 +44,7 @@ if (root) {
   if (written.status === 'success') {
     const read = await readLocalFile({ uri: written.uri, encoding: 'utf8' });
     if (read.status === 'success') {
-      // read.content 是文件文本；解析和使用方式由当前功能决定。
+      console.log(read.content); // 你好，Unif Files
     } else {
       console.warn(read.error.message);
     }
@@ -55,14 +54,14 @@ if (root) {
 }
 ```
 
-`root` 不可用时由宿主结束本次文件操作并给出场景反馈，不拼接 `undefined` 或回退到未经授权的目录。示例子目录只服务于当前示例；库不会替应用分配业务目录。
+`getNativeTemporaryRoot()` 返回 iOS Library 目录或 Android 应用内部文件目录的 URI；路径不可用时返回 `undefined`。请在返回目录下创建自己的子目录，库不会自动分配或清理文件。详情见[目录路径](api/lifetime.md#getnativetemporaryroot)。
 
-写入自动准备父目录并覆盖同一目标，没有原子替换或回滚保证。读取编码必须明确为 `utf8` 或 `base64`，空文件成功返回空字符串。
+写入使用 UTF-8，会创建父目录并覆盖已有文件。读取需指定 `utf8` 或 `base64`；空文件返回空字符串。写入不是原子替换，失败时不会回滚原内容。
 
-## 接收结果并安排释放
+## 处理结果
 
-只在 `status === 'success'` 后使用交付的 URI。复制、下载需要调用方分配尚未存在的独占目标，不能与其他写入并发复用。
+通过 `result.status` 判断结果，成功后再使用文件。复制和下载要求目标文件尚不存在，且同一目标不能同时被其他操作写入。
 
-成功文件由调用方持有。涉及上传、预览等多个读取者时，使用[文件使用期](api/lifetime.md)在实际读取结束后释放；不以页面关闭、取消请求或上传 Promise 完成代替 SDK 的读取结束通知。
+文件使用结束后由应用删除。多个组件共用文件时，可用[延迟清理](api/lifetime.md)等待所有使用者结束后再删除。
 
-接下来可查阅[文件操作](api/file-operations.md)、[下载](api/download.md)、[本地资源访问](api/local-resources.md)和[排障](troubleshooting.md)。
+继续阅读[文件与目录](api/file-operations.md)、[文件下载](api/download.md)或[本地资源访问](api/local-resources.md)。
