@@ -13,7 +13,7 @@ description: 工程规范、文档维护、构建与测试。
 
 本库使用 `create-react-native-library` 的 JavaScript 模板，版本见根 `package.json`。文件操作依赖原生 SDK，本库没有自有原生模块。`example` 提供 iOS／Android 应用。
 
-工程标准采用 [unif-design/.github](https://github.com/unif-design/.github) 的 `a29d71586a63a1b39d9a3acc446741289150ac41` 修订。CI、发布、Agent 入口和 LLM 生成器按 [ONBOARDING](https://github.com/unif-design/.github/blob/main/ONBOARDING.md) 同步，统一在组织标准中维护。
+初始工程接入采用组织标准修订 `a29d71586a63a1b39d9a3acc446741289150ac41`。当前 CI、发布、Agent 入口和 LLM 生成器的维护来源见[交付配置与检查](#交付配置与检查)。
 
 通用规范使用 `uni-skills`：`code-organization` 说明目录与文件组织，`react-native-development` 说明 RN 实现要求，`react-native-library` 说明独立库与消费者验证，`documentation` 说明文档与文档站维护。Unif 的设计、测试、审查和交付按 `unif-portal-dev-skills` 对应技能执行；本库接口与行为以公开类型和有效契约为准。
 
@@ -36,7 +36,7 @@ description: 工程规范、文档维护、构建与测试。
 
 Markdown 源文件位于 `docs/`，Docusaurus 直接读取；`website/docs` 指向同一目录，供 LLM 生成器使用。首页采用 `@unif/react-native-design` 1.13.6 的 `docs-home.css`。
 
-LLM 生成器由组织 `templates/llms/` 维护，通过 `scripts/sync-repo.sh` 或 `scripts/sync-llms.cjs` 同步。修改 Markdown 后重新构建，生成 `llms.txt`、`llms-full.txt` 和 `md/`；生成产物不入库，也不手工修改。
+LLM 生成器由 `github-delivery` 的 `templates/llms` 维护，通过该技能提供的同步工具更新本库脚本。修改 Markdown 后运行本库 `node website/scripts/build-llms.js` 或文档站构建，生成 `llms.txt`、`llms-full.txt` 和 `md/`；生成产物不入库，也不手工修改。
 
 ## 本地检查
 
@@ -76,3 +76,18 @@ yarn check:native-patches --patch-dir <应用补丁目录> --consumer <消费应
 在 [example](https://github.com/unif-design/react-native-files/tree/main/example) 中验证文件读写、路径编码、目录统计与清理、下载与取消、本地 HTTP 加载与关闭。使用实际原生依赖和已配置补丁的应用。
 
 分别记录静态检查、测试、构建、设备运行和业务验收结果；发布时另核对 npm 产物、CI、GitHub Release 和线上文档。保留有效设计和验收结论，原始日志及个人设备记录保存在仓库外。
+
+## 交付配置与检查
+
+共享 CI、发布配置和检查工具由 `github-delivery` 的模板与工具维护。Unif 组织值由 `code-delivery` 的 `assets/organization.json` 维护，接入时落实为本库 `.github/organization.json`，记录组织、包名规则、Pages 地址、发布 App 身份及远端设置。工具运行时读取项目文件，不依赖其他技能的安装目录；适用技能按当前任务独立选择。
+
+在仓库根目录按阶段执行：
+
+| 命令 | 检查范围 |
+| --- | --- |
+| `node .github/scripts/check-delivery.cjs` | 离线检查受管文件、组织配置与 source 元数据。 |
+| `node .github/scripts/check-library.cjs pack` | 完成库构建后，检查当前 tarball 的导出、声明与文件清单。 |
+| `node .github/scripts/check-library.cjs release` | 发行前校验 README、许可和发布配置，不执行发布。 |
+| `node .github/scripts/check-library.cjs published` | 联网核验 npm 当前版本的元数据、下载完整性与实际 tarball。 |
+
+CI 与发布步骤见本库 `.github/workflows/`，组织配置调整以项目文件及当前授权为准。本地检查、远端 CI、npm 发布、文档部署和设备验收分别报告。
