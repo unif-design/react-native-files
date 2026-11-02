@@ -15,7 +15,7 @@ declare function createLocalFileLifetime(
 ): LocalFileLifetime;
 ```
 
-每个使用者调用 `retain()` 登记使用，结束时调用返回的释放函数。应用调用 `retire()` 将文件标记为待清理；所有使用者都释放后，才执行 `cleanup`。
+预览等使用者调用 `retain()` 登记使用；需要避免同一文件并发上传时，使用 `retainRead()` 取得独占读取权。结束时调用各自返回的释放函数。应用调用 `retire()` 将文件标记为待清理；所有使用者都释放后，才执行 `cleanup`。
 
 ```ts
 import {
@@ -38,6 +38,8 @@ releasePreview?.(); // 重复调用不会再次清理。
 ```
 
 已标记待清理、但仍有使用者时，可以继续调用 `retain()`。清理一旦开始，`retain()` 返回 `undefined`。重复释放或调用 `retire()` 都不会重复清理。
+
+`retainRead()` 同时登记文件持有；已有读取或文件已经退休时返回 `undefined`。读取释放后，`isReading()` 返回 `false`，未退休的文件可再次取得读取权。每次释放独立且幂等，旧读取回调不会解除后来取得的读取权。预览持有不占用独占读取权，清理仍须等待读取和所有预览释放。
 
 `cleanup` 的类型为 `() => void`。库不等待异步删除，也不重试，应用需自行处理删除结果。同步异常会传回触发清理的 `retire()` 或释放函数。
 

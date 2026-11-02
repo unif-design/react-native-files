@@ -89,6 +89,9 @@ export async function consumePublicFiles() {
   const uri = 'file:///fixture/file';
   const root: string | undefined = getNativeTemporaryRoot();
   const lifetime: LocalFileLifetime = createLocalFileLifetime(() => {});
+  const releaseRead: (() => void) | undefined = lifetime.retainRead();
+  const reading: boolean = lifetime.isReading();
+  releaseRead?.();
   const access: LocalResourceAccess = createLocalResourceAccess({
     rootUri: 'file:///fixture',
   });
@@ -124,6 +127,7 @@ export async function consumePublicFiles() {
   return {
     root,
     lifetime,
+    reading,
     access,
     copied,
     downloaded,
