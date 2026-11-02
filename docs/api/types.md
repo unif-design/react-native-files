@@ -197,6 +197,8 @@ interface LocalResourceAccess {
 ```ts
 interface LocalFileLifetime {
   retain(): (() => void) | undefined;
+  retainRead(): (() => void) | undefined;
+  isReading(): boolean;
   retire(): void;
 }
 ```

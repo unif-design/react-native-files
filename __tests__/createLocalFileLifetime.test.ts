@@ -1,5 +1,26 @@
 import { createLocalFileLifetime } from '../src/createLocalFileLifetime';
 
+test('原生读取未释放时不取得第二次读取权，预览与读取各自释放', () => {
+  const cleanup = jest.fn();
+  const file = createLocalFileLifetime(cleanup);
+  const preview = file.retain()!;
+  const first = file.retainRead()!;
+  expect(file.isReading()).toBe(true);
+  expect(file.retainRead()).toBeUndefined();
+  first();
+  expect(file.isReading()).toBe(false);
+  const second = file.retainRead()!;
+  first();
+  expect(file.isReading()).toBe(true);
+  file.retire();
+  expect(file.retainRead()).toBeUndefined();
+  second();
+  expect(cleanup).not.toHaveBeenCalled();
+  preview();
+  expect(cleanup).toHaveBeenCalledTimes(1);
+  expect(file.isReading()).toBe(false);
+});
+
 test('业务退休后仍等待读取和多个预览，独立持有恰好释放一次', () => {
   const cleanup = jest.fn();
   const file = createLocalFileLifetime(cleanup);
