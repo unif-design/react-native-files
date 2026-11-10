@@ -10,10 +10,10 @@ description: 安装依赖，写入并读取一个文本文件。
 在 React Native 项目中安装本库及依赖：
 
 ```sh
-npm install @unif/react-native-files @unif/react-native-logger@0.1.3 \
+npm install @unif/react-native-files @unif/react-native-logger@0.2.2 \
   @dr.pogodin/react-native-fs@2.41.0 \
   @dr.pogodin/react-native-static-server@0.28.1 \
-  react-native-blob-util@0.25.1
+  react-native-blob-util@1.1.1
 ```
 
 按[安装配置](host-setup.md)应用必要的 SDK 补丁。本库不附带或自动应用补丁；安装 npm 包后仍需完成这一步。

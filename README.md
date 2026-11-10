@@ -8,14 +8,14 @@ React Native 文件工具库，提供文件读写、复制、下载、目录清�
 
 iOS／Android 需要原生依赖、SDK 补丁和重新编译。Expo Go 不支持；Web 仅可使用文件生命周期工具，实际文件操作返回不支持，详见[平台说明](docs/intro.md#支持平台)。
 
-| 依赖                   | 支持要求                | 本仓开发组合 |
+| 依赖                   | 支持要求                | 本次验证组合 |
 | ---------------------- | ----------------------- | ------------ |
 | React                  | `>=19.3.0`              | 19.3.1       |
 | React Native           | `>=0.88.0`              | 0.88.1       |
-| Logger                 | `^0.1.3`                | 0.1.3        |
+| Logger                 | `^0.2.2`                | 0.2.2        |
 | RNFS                   | 精确 2.41.0，需宿主补丁 | 2.41.0       |
 | StaticServer           | 精确 0.28.1，需宿主补丁 | 0.28.1       |
-| react-native-blob-util | 精确 0.25.1             | 0.25.1       |
+| react-native-blob-util | 精确 1.1.1              | 1.1.1        |
 
 完整依赖与补丁要求见[安装配置](docs/host-setup.md)。URL polyfill 随本包安装，无需另行配置；开发组合不代表全部版本组合已通过设备验证。
 
@@ -24,10 +24,10 @@ iOS／Android 需要原生依赖、SDK 补丁和重新编译。Expo Go 不支持
 1. 安装本库及 peer 依赖：
 
    ```sh
-   npm install @unif/react-native-files @unif/react-native-logger@0.1.3 \
+   npm install @unif/react-native-files @unif/react-native-logger@0.2.2 \
      @dr.pogodin/react-native-fs@2.41.0 \
      @dr.pogodin/react-native-static-server@0.28.1 \
-     react-native-blob-util@0.25.1
+     react-native-blob-util@1.1.1
    ```
 
 2. 按[安装配置](docs/host-setup.md#sdk-补丁)应用宿主维护的 RNFS、StaticServer 补丁，核对实际使用的依赖副本。本库不附带或自动应用补丁。

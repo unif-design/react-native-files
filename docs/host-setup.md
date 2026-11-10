@@ -9,14 +9,14 @@ description: 原生依赖、SDK 补丁、日志和本地 HTTP 配置。
 
 本库通过原生 SDK 操作文件。安装 peer 依赖后，需完成原生自动链接、iOS Pods 安装并重新编译应用。
 
-| 依赖                                     | 版本要求             | 验证基线 |
-| ---------------------------------------- | -------------------- | -------- |
-| `react`                                  | `>=19.3.0`           | 19.3.1   |
-| `react-native`                           | `>=0.88.0`           | 0.88.1   |
-| `@dr.pogodin/react-native-fs`            | 精确 2.41.0          | 2.41.0   |
-| `@dr.pogodin/react-native-static-server` | 精确 0.28.1          | 0.28.1   |
-| `react-native-blob-util`                 | 精确 0.25.1          | 0.25.1   |
-| `@unif/react-native-logger`              | `^0.1.3 \|\| ^0.2.0` | 0.1.3    |
+| 依赖                                     | 版本要求    | 验证基线 |
+| ---------------------------------------- | ----------- | -------- |
+| `react`                                  | `>=19.3.0`  | 19.3.1   |
+| `react-native`                           | `>=0.88.0`  | 0.88.1   |
+| `@dr.pogodin/react-native-fs`            | 精确 2.41.0 | 2.41.0   |
+| `@dr.pogodin/react-native-static-server` | 精确 0.28.1 | 0.28.1   |
+| `react-native-blob-util`                 | 精确 1.1.1  | 1.1.1    |
+| `@unif/react-native-logger`              | `^0.2.2`    | 0.2.2    |
 
 `react-native-url-polyfill` 4.0.0 随本包安装，无需另行配置全局 URL。表中验证基线不代表版本范围内的所有组合都已测试。
 
