@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1](https://github.com/unif-design/react-native-files/compare/v0.2.0...v0.2.1) (2026-11-10)
+
+### Bug Fixes
+
+* 统一 BlobUtil 与 Logger 的兼容依赖 ([c5e1b07](https://github.com/unif-design/react-native-files/commit/c5e1b07ea420cc65ad5dd4fcdfc48e817efd4a89))
+
 # [0.2.0](https://github.com/unif-design/react-native-files/compare/v0.1.0...v0.2.0) (2026-11-02)
 
 ### Features
