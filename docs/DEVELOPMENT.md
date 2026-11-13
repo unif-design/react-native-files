@@ -15,7 +15,7 @@ description: 工程规范、文档维护、构建与测试。
 
 初始工程接入采用组织标准修订 `a29d71586a63a1b39d9a3acc446741289150ac41`。当前 CI、发布、Agent 入口和 LLM 生成器的维护来源见[交付配置与检查](#交付配置与检查)。
 
-通用规范使用 `uni-skills`：`code-organization` 说明目录与文件组织，`react-native-development` 说明 RN 实现要求，`react-native-library` 说明独立库与消费者验证，`documentation` 说明文档与文档站维护。Unif 的设计、测试、审查和交付按 `unif-portal-dev-skills` 对应技能执行；本库接口与行为以公开类型和有效契约为准。
+通用规范使用 `uni-skills`：`uni-code-organization` 说明目录与文件组织，`uni-rn-dev` 说明 RN 实现要求，`uni-rn-library` 说明独立库与消费者验证，`uni-documentation` 说明文档与文档站维护。Unif 的设计、测试、审查和交付按 `unif-portal-dev-skills` 对应技能执行；本库接口与行为以公开类型和有效契约为准。
 
 行为契约：
 
@@ -36,7 +36,7 @@ description: 工程规范、文档维护、构建与测试。
 
 Markdown 源文件位于 `docs/`，Docusaurus 直接读取；`website/docs` 指向同一目录，供 LLM 生成器使用。首页采用 `@unif/react-native-design` 1.13.6 的 `docs-home.css`。
 
-LLM 生成器由 `github-delivery` 的 `templates/llms` 维护，通过该技能提供的同步工具更新本库脚本。修改 Markdown 后运行本库 `node website/scripts/build-llms.js` 或文档站构建，生成 `llms.txt`、`llms-full.txt` 和 `md/`；生成产物不入库，也不手工修改。
+LLM 生成器由 `uni-github-delivery` 的 `templates/llms` 维护，通过该技能提供的同步工具更新本库脚本。修改 Markdown 后运行本库 `node website/scripts/build-llms.js` 或文档站构建，生成 `llms.txt`、`llms-full.txt` 和 `md/`；生成产物不入库，也不手工修改。
 
 ## 本地检查
 
@@ -79,7 +79,7 @@ yarn check:native-patches --patch-dir <应用补丁目录> --consumer <消费应
 
 ## 交付配置与检查
 
-共享 CI、发布配置和检查工具由 `github-delivery` 的模板与工具维护。Unif 组织值由 `code-delivery` 的 `assets/organization.json` 维护，接入时落实为本库 `.github/organization.json`，记录组织、包名规则、Pages 地址、发布 App 身份及远端设置。工具运行时读取项目文件，不依赖其他技能的安装目录；适用技能按当前任务独立选择。
+共享 CI、发布配置和检查工具由 `uni-github-delivery` 的模板与工具维护。Unif 组织值由 `unif-code-delivery` 的 `assets/organization.json` 维护，接入时落实为本库 `.github/organization.json`，记录组织、包名规则、Pages 地址、发布 App 身份及远端设置。工具运行时读取项目文件，不依赖其他技能的安装目录；适用技能按当前任务独立选择。
 
 在仓库根目录按阶段执行：
 
