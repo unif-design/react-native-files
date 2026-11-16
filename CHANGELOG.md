@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.2](https://github.com/unif-design/react-native-files/compare/v0.2.1...v0.2.2) (2026-11-16)
+
+### Bug Fixes
+
+* **files:** 兼容 Logger 0.3 共享运行时 ([#11](https://github.com/unif-design/react-native-files/issues/11)) ([cc81857](https://github.com/unif-design/react-native-files/commit/cc818576bb0c471496c56d8fb1bb9fc716508ac1))
+
 ## [0.2.1](https://github.com/unif-design/react-native-files/compare/v0.2.0...v0.2.1) (2026-11-10)
 
 ### Bug Fixes
