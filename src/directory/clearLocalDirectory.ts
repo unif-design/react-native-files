@@ -1,12 +1,12 @@
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { isMissingFileError, localFileAccess } from './fileAccess';
-import { parseLocalFileUri } from './fileUri';
-import { localFileFailed } from './localFileFailed';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { isMissingFileError, localFileAccess } from '../io/fileAccess';
+import { parseLocalFileUri } from '../io/fileUri';
+import { localFileFailed } from '../localFileFailed';
 import type {
   ClearLocalDirectoryResult,
   LocalDirectoryEntryFailure,
   LocalFileLocation,
-} from './types';
+} from '../types';
 
 async function readDirectEntries(path: string) {
   const entries = await localFileAccess.readDir(path);

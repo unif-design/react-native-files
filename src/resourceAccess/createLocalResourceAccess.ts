@@ -2,8 +2,8 @@ import StaticServer, {
   getActiveServer,
   STATES,
 } from '@dr.pogodin/react-native-static-server';
-import { LOCAL_FILE_MESSAGES, LOCAL_RESOURCE_HOSTNAME } from './constants';
-import { localFileFailed } from './localFileFailed';
+import { LOCAL_FILE_MESSAGES, LOCAL_RESOURCE_HOSTNAME } from '../constants';
+import { localFileFailed } from '../localFileFailed';
 import {
   getLocalResourcePath,
   getLocalResourceRoot,
@@ -12,7 +12,7 @@ import type {
   CloseLocalResourceResult,
   LocalResourceAccess,
   LocalResourceAccessInput,
-} from './types';
+} from '../types';
 
 export function createLocalResourceAccess(
   input: LocalResourceAccessInput,

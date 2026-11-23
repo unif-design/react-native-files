@@ -5,7 +5,7 @@ test('Web 临时根不加载原生文件 SDK，明确没有可用根目录', () 
   });
   const {
     getNativeTemporaryRoot,
-  } = require('../src/getNativeTemporaryRoot.web');
+  } = require('../src/directory/getNativeTemporaryRoot.web');
   expect(getNativeTemporaryRoot()).toBeUndefined();
 });
 
@@ -15,13 +15,15 @@ test('Web 复制、删除和目录统计明确返回 unsupported 且不加载原
     throw new Error('Web 不应加载原生文件 SDK');
   });
 
-  let copyLocalFile: typeof import('../src/copyLocalFile.web').copyLocalFile;
-  let getLocalDirectorySize: typeof import('../src/getLocalDirectorySize.web').getLocalDirectorySize;
-  let deleteLocalFile: typeof import('../src/deleteLocalFile.web').deleteLocalFile;
+  let copyLocalFile: typeof import('../src/io/copyLocalFile.web').copyLocalFile;
+  let getLocalDirectorySize: typeof import('../src/directory/getLocalDirectorySize.web').getLocalDirectorySize;
+  let deleteLocalFile: typeof import('../src/io/deleteLocalFile.web').deleteLocalFile;
   jest.isolateModules(() => {
-    ({ getLocalDirectorySize } = require('../src/getLocalDirectorySize.web'));
-    ({ copyLocalFile } = require('../src/copyLocalFile.web'));
-    ({ deleteLocalFile } = require('../src/deleteLocalFile.web'));
+    ({
+      getLocalDirectorySize,
+    } = require('../src/directory/getLocalDirectorySize.web'));
+    ({ copyLocalFile } = require('../src/io/copyLocalFile.web'));
+    ({ deleteLocalFile } = require('../src/io/deleteLocalFile.web'));
   });
 
   await expect(
@@ -56,10 +58,12 @@ test('Web 新文件操作明确 unsupported，不加载原生 SDK', async () => 
   jest.doMock('@dr.pogodin/react-native-fs', () => {
     throw new Error('Web 不应加载原生文件 SDK');
   });
-  const { readLocalFile } = require('../src/readLocalFile.web');
-  const { writeLocalFile } = require('../src/writeLocalFile.web');
-  const { getLocalFileSize } = require('../src/getLocalFileSize.web');
-  const { clearLocalDirectory } = require('../src/clearLocalDirectory.web');
+  const { readLocalFile } = require('../src/io/readLocalFile.web');
+  const { writeLocalFile } = require('../src/io/writeLocalFile.web');
+  const { getLocalFileSize } = require('../src/io/getLocalFileSize.web');
+  const {
+    clearLocalDirectory,
+  } = require('../src/directory/clearLocalDirectory.web');
   for (const result of [
     readLocalFile({ uri: 'file:///tmp/file', encoding: 'utf8' }),
     writeLocalFile({ uri: 'file:///tmp/file', content: '' }),
@@ -81,7 +85,9 @@ test('Web 下载明确 unsupported，前置取消零 SDK 访问', async () => {
   jest.doMock('@dr.pogodin/react-native-fs', () => {
     throw new Error('Web 不应加载原生文件 SDK');
   });
-  const { downloadLocalFile } = require('../src/downloadLocalFile.web');
+  const {
+    downloadLocalFile,
+  } = require('../src/download/downloadLocalFile.web');
   const input = {
     sourceUrl: 'https://example.invalid/a',
     targetUri: 'file:///tmp/a',

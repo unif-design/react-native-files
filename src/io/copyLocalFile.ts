@@ -1,6 +1,6 @@
 import { createLogger } from '@unif/react-native-logger';
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { localFileFailed } from './localFileFailed';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { localFileFailed } from '../localFileFailed';
 import {
   getFileErrorCode,
   isMissingFileError,
@@ -11,7 +11,7 @@ import type {
   CopyLocalFileInput,
   CopyLocalFileResult,
   LocalFileFailed,
-} from './types';
+} from '../types';
 
 const activeTargetPaths = new Set<string>();
 const logger = createLogger('files.localMedia');

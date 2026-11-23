@@ -1,4 +1,4 @@
-import type { LocalFileLocation } from './types';
+import type { LocalFileLocation } from '../types';
 
 function normalizeAbsolutePath(path: string) {
   const segments: string[] = [];

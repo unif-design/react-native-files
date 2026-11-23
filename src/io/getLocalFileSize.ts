@@ -1,8 +1,8 @@
-import { LOCAL_FILE_MESSAGES } from './constants';
+import { LOCAL_FILE_MESSAGES } from '../constants';
 import { localFileAccess } from './fileAccess';
 import { parseLocalFileUri } from './fileUri';
-import { localFileFailed } from './localFileFailed';
-import type { LocalSizeResult } from './types';
+import { localFileFailed } from '../localFileFailed';
+import type { LocalSizeResult } from '../types';
 
 export async function getLocalFileSize(uri: string): Promise<LocalSizeResult> {
   const location = parseLocalFileUri(uri);

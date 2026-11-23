@@ -1,14 +1,14 @@
-export { downloadLocalFile } from './downloadLocalFile';
-export { createLocalResourceAccess } from './createLocalResourceAccess';
+export { downloadLocalFile } from './download/downloadLocalFile';
+export { createLocalResourceAccess } from './resourceAccess/createLocalResourceAccess';
 export { createLocalFileLifetime } from './createLocalFileLifetime';
-export { getNativeTemporaryRoot } from './getNativeTemporaryRoot';
-export { copyLocalFile } from './copyLocalFile';
-export { deleteLocalFile } from './deleteLocalFile';
-export { getLocalDirectorySize } from './getLocalDirectorySize';
-export { readLocalFile } from './readLocalFile';
-export { writeLocalFile } from './writeLocalFile';
-export { getLocalFileSize } from './getLocalFileSize';
-export { clearLocalDirectory } from './clearLocalDirectory';
+export { getNativeTemporaryRoot } from './directory/getNativeTemporaryRoot';
+export { copyLocalFile } from './io/copyLocalFile';
+export { deleteLocalFile } from './io/deleteLocalFile';
+export { getLocalDirectorySize } from './directory/getLocalDirectorySize';
+export { readLocalFile } from './io/readLocalFile';
+export { writeLocalFile } from './io/writeLocalFile';
+export { getLocalFileSize } from './io/getLocalFileSize';
+export { clearLocalDirectory } from './directory/clearLocalDirectory';
 export type {
   LocalFileLifetime,
   LocalResourceAccessInput,

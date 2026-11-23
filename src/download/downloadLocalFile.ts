@@ -1,21 +1,21 @@
 import { URL } from 'react-native-url-polyfill';
 import { downloadFile, stopDownload } from '@dr.pogodin/react-native-fs';
 import { createLogger } from '@unif/react-native-logger';
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { deleteLocalFile } from './deleteLocalFile';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { deleteLocalFile } from '../io/deleteLocalFile';
 import {
   getFileErrorCode,
   isMissingFileError,
   localFileAccess,
-} from './fileAccess';
-import { parseLocalFileUri } from './fileUri';
-import { getLocalFileSize } from './getLocalFileSize';
-import { localFileFailed } from './localFileFailed';
+} from '../io/fileAccess';
+import { parseLocalFileUri } from '../io/fileUri';
+import { getLocalFileSize } from '../io/getLocalFileSize';
+import { localFileFailed } from '../localFileFailed';
 import type {
   DownloadLocalFileInput,
   DownloadLocalFileOptions,
   DownloadLocalFileResult,
-} from './types';
+} from '../types';
 
 const activeTargetPaths = new Set<string>();
 const logger = createLogger('files.download');
