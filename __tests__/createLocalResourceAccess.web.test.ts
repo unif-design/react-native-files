@@ -8,8 +8,8 @@ function loadWebFactory() {
   });
   const {
     createLocalResourceAccess,
-  } = require('../src/createLocalResourceAccess.web');
-  return createLocalResourceAccess as typeof import('../src/createLocalResourceAccess.web').createLocalResourceAccess;
+  } = require('../src/resourceAccess/createLocalResourceAccess.web');
+  return createLocalResourceAccess as typeof import('../src/resourceAccess/createLocalResourceAccess.web').createLocalResourceAccess;
 }
 
 test('Web 本地资源入口不加载原生 SDK，有效请求明确 unsupported，输入检查仍生效', async () => {

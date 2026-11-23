@@ -1,8 +1,8 @@
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { localFileFailed } from './localFileFailed';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { localFileFailed } from '../localFileFailed';
 import { isMissingFileError, localFileAccess } from './fileAccess';
 import { parseLocalFileUri } from './fileUri';
-import type { DeleteLocalFileResult, LocalFileFailed } from './types';
+import type { DeleteLocalFileResult, LocalFileFailed } from '../types';
 
 function deleteFailed(cause: unknown): LocalFileFailed {
   return localFileFailed('io', LOCAL_FILE_MESSAGES.deleteFailed, { cause });

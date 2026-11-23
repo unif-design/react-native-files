@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import BlobUtil from 'react-native-blob-util';
-import { getNativeTemporaryRoot } from '../src/getNativeTemporaryRoot';
+import { getNativeTemporaryRoot } from '../src/directory/getNativeTemporaryRoot';
 
 jest.mock('react-native-blob-util', () => ({
   fs: {

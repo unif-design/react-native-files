@@ -1,5 +1,5 @@
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { localFileFailed } from './localFileFailed';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { localFileFailed } from '../localFileFailed';
 import {
   getLocalResourcePath,
   getLocalResourceRoot,
@@ -8,7 +8,7 @@ import type {
   CloseLocalResourceResult,
   LocalResourceAccess,
   LocalResourceAccessInput,
-} from './types';
+} from '../types';
 
 export function createLocalResourceAccess(
   input: LocalResourceAccessInput,

@@ -7,7 +7,7 @@ import {
   stat,
   unlink,
 } from '@dr.pogodin/react-native-fs';
-import { LOCAL_FILE_MISSING_CODES } from './constants';
+import { LOCAL_FILE_MISSING_CODES } from '../constants';
 
 export const localFileAccess = {
   copyFile,

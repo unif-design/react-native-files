@@ -1,7 +1,10 @@
-import { LOCAL_FILE_MESSAGES } from './constants';
-import { parseLocalFileUri } from './fileUri';
-import { localFileFailed } from './localFileFailed';
-import type { LocalResourceAccessInput, LocalResourceUrlFailed } from './types';
+import { LOCAL_FILE_MESSAGES } from '../constants';
+import { parseLocalFileUri } from '../io/fileUri';
+import { localFileFailed } from '../localFileFailed';
+import type {
+  LocalResourceAccessInput,
+  LocalResourceUrlFailed,
+} from '../types';
 
 export function getLocalResourceRoot(input: LocalResourceAccessInput): string {
   const root = parseLocalFileUri(input?.rootUri);
